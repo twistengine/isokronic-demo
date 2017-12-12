@@ -17,125 +17,45 @@ function Controller($scope) {
         icon: "",
         message: "Hello world"
     };
+    
+    $scope.demoCommands = [ {
+            title:"Add rocket icon", 
+            name:"AddObjectCommand",
+            value:{
+                uuid: "123456",
+                type: "Mesh",
+                icon: "",
+                message: "Hello world"
+            }
+        },
+        {
+           title:"Move the red box", 
+           name:"SetPositionCommand",
+            value:{
+                uuid: "6C16D678-392A-4A5E-AB3B-761A9FF4B8A3",
+                x:"2",
+                y:"3",
+                z:"0"
+            }
+        },
+        {
+           title:"Add timeline tag", 
+           name:"AddTagCommand",
+            value:{
+                time:"1.1",
+                text:"First Step"
+            }
+        }];
+    
+    $scope.projectId = 'PnJGzTzmig2AHPMsh';//'kF964uptwQjNFC2H9';
+    $scope.publicKey = 'eq2BHFqMWvj8jt_jPvrCJ7stnj6q0RMyDPKnmPjKnbM';//'Qiyh5SnUQD_3VHP0WngCHHrN8kIxX4lhZLUNjee28wg';
 
-    $scope.projectId = 'FCSmNZ24k3aTNZERd';
-    $scope.publicKey = 'xzzokSJFK2m2nEno0j2_aajD73ecJA5NNSBwGStAfGy';
+    $scope.objectAttr = ikObjectAttr;
 
-    var positionAttributes = [
-        { name: 'x', model: null, defaultValue: 0, type: 'number' },
-        { name: 'y', model: null, defaultValue: 0, type: 'number' },
-        { name: 'z', model: null, defaultValue: 0, type: 'number' }
-    ];
-
-    var rotationAttributes = [
-        { name: 'x', model: null, defaultValue: 0, type: 'number' },
-        { name: 'y', model: null, defaultValue: 0, type: 'number' },
-        { name: 'z', model: null, defaultValue: 0, type: 'number' },
-        { name: 'order', model: null, defaultValue: 'XYZ', type: 'string' }
-    ];
-
-    var scaleAttributes = [
-        { name: 'x', model: null, defaultValue: 0, type: 'number' },
-        { name: 'y', model: null, defaultValue: 0, type: 'number' },
-        { name: 'z', model: null, defaultValue: 0, type: 'number' }
-    ];
-
-    var geometryAttributes = [
-        { name: 'type', model: null, defaultValue: 'Box', type: 'select', allowed: ['Box', 'Sphere', 'Cylinder', 'Plane', 'Circle'] },
-        { name: 'width', model: null, defaultValue: null, type: 'number', enable: ['Box', 'Plane'] },
-        { name: 'height', model: null, defaultValue: null, type: 'number', enable: ['Box', 'Plane', 'Cylinder'] },
-        { name: 'depth', model: null, defaultValue: null, type: 'number', enable: ['Box'] },
-        { name: 'radius', model: null, defaultValue: null, type: 'number' },
-        { name: 'segments', model: null, defaultValue: null, type: 'number' },
-        { name: 'radiusTop', model: null, defaultValue: null, type: 'number' },
-        { name: 'radiusBottom', model: null, defaultValue: null, type: 'number' },
-        { name: 'radiusSegments', model: null, defaultValue: null, type: 'number' },
-        { name: 'openEnded', model: null, defaultValue: null, type: 'number' },
-        { name: 'widthSegments', model: null, defaultValue: null, type: 'number' },
-        { name: 'heightSegments', model: null, defaultValue: null, type: 'number' },
-        { name: 'phiStart', model: null, defaultValue: null, type: 'number' },
-        { name: 'phiLength', model: null, defaultValue: null, type: 'number' },
-        { name: 'thetaStart', model: null, defaultValue: null, type: 'number' },
-        { name: 'thetaLength', model: null, defaultValue: null, type: 'number' }
-    ];
-
-    var materialAttributes = [
-        { name: 'type', model: null, defaultValue: 'Standard', allowed: ['Text', 'Standard', 'Phong'] },
-        { name: 'color', model: null, defaultValue: null },
-        { name: 'emissive', model: null, defaultValue: null },
-        { name: 'roughness', model: null, defaultValue: null },
-        { name: 'metalness', model: null, defaultValue: null }
-    ];
-
-    $scope.objectAttr = [
-        { name: 'uuid', model: '12345678', defaultValue: '12345678', info: 'Universal unique identifier' }, //Required universal unique identifier.
-        { name: 'type', model: null, defaultValue: 'Mesh', type: 'select', allowed: ['Mesh', 'Icon', 'Light', 'Comment', 'Event'] }, //Mesh, Light, Comment, Event or Alert, Icon
-        { name: 'url', model: null, defaultValue: '', type: 'string' },
-        { name: 'color', model: null, defaultValue: '' },
-        { name: 'parentUuid', model: null, defaultValue: '', info: 'Uuid of object this object will be link to' }, //object type.
-        { name: 'name', model: null, defaultValue: 'No name' }, //object name.
-        { name: 'icon', model: null, defaultValue: '', info: 'Enter an unicode code from the great and free Font Awesome icon library.\n For example : \\f135 or "rocket".\n More info: http://fontawesome.io' }, //
-        { name: 'message', model: null, defaultValue: '' }, //
-        { name: 'matrix', model: null, defaultValue: '' }, //Object matrix. Attention si elle est définie, la position, la rotation et l’échelle ne seront pas prises en compte.
-        { name: 'position', model: null, attributes: positionAttributes }, //Position x, y, z. if null, it will be set to 0, 0, 0.
-        { name: 'rotation', model: null, attributes: rotationAttributes }, //Rotation x, y, z. if null, it will be set to 0, 0, 0. De l’objet en radians dans l’ordre défini par "order" ("XYZ" par défaut).
-        { name: 'scale', model: null, attributes: scaleAttributes }, //Scale x, y, z. if null, it will be set to 0, 0, 0.
-        { name: 'geometry', model: null, attributes: geometryAttributes }, //Définition de la géométrie. Pour éviter les temps de chargement, il est conseillé d’utiliser les primitives ("Box", "Sphere", "Cylinder", etc). Voir la doc Threejs.
-        { name: 'material', model: null, attributes: materialAttributes }
-    ];
-
-    $scope.commands = [{
-        title: 'Set Object Value',
-        command: 'SetValueCommand',
-        infos: ['uuid: Unique identifier of the object', 'attributeName: Name of the value to change.', 'value: Your new value.'],
-        values: [{ name: 'uuid', model: null, type: 'string' },
-            { name: 'attributeName', model: null, type: 'string' },
-            { name: 'value', model: null, type: 'string' }
-        ]
-    }, {
-        title: 'Set Position',
-        command: 'SetPositionCommand',
-        values: [{ name: 'uuid', model: null }, { name: 'x', model: null }, { name: 'y', model: null }, { name: 'z', model: null }]
-    }, {
-        title: 'Set Rotation',
-        command: 'SetRotationCommand',
-        values: [{ name: 'uuid', model: null }, { name: 'x', model: null }, { name: 'y', model: null }, { name: 'z', model: null }, { name: 'order', model: null }]
-    }, {
-        title: 'Set Scale',
-        command: 'SetScaleCommand',
-        values: [{ name: 'uuid', model: null }, { name: 'x', model: null }, { name: 'y', model: null }, { name: 'z', model: null }]
-    }, {
-        title: 'Set Uuid',
-        command: 'SetUuidCommand',
-        values: [{ name: 'uuid', model: null }, { name: 'newUuid', model: null }]
-    }, {
-        title: 'Set Material Map',
-        command: 'SetMaterialMapCommand',
-        values: [{ name: 'uuid', model: null }, { name: 'materialIndex', model: null }, { name: 'mapName', model: null }, { name: 'url', model: null }]
-    }, {
-        title: 'Set Material',
-        command: 'SetMaterialCommand',
-        values: [{ name: 'uuid', model: null }, { name: 'materialIndex', model: null }, { name: 'material', model: null, defaultValue: 'Standard', allowed: ['Text', 'Standard', 'Phong'] }]
-    }, {
-        title: 'Set Material Value',
-        command: 'SetMaterialValueCommand',
-        values: [{ name: 'uuid', model: null }, { name: 'materialIndex', model: null }, { name: 'attributeNam', model: null }, { name: 'value', model: null }]
-    }, {
-        title: 'Set Material Color',
-        command: 'SetMaterialColorCommand',
-        values: [{ name: 'uuid', model: null }, { name: 'materialIndex', model: null }, { name: 'attributeName', model: null }, { name: 'color', model: null }]
-    }, {
-        title: 'Remove Object',
-        command: 'RemoveObjectCommand',
-        values: [{ name: 'uuid', model: null }]
-    }, {
-        title: 'Add Preset',
-        command: 'AddPresetCommand',
-        values: [{ name: 'name', model: null }]
-    }];
+    $scope.commands = ikCommands;
 
     socket.on('error', function(msg) {
-
+        console.log("error");
         if (!msg) return;
         if (msg.command == "AddObjectCommand") {
 
@@ -157,6 +77,7 @@ function Controller($scope) {
     });
 
     socket.on('result', function(msg) {
+        console.log("result");
 
         if (!msg) return;
         if (msg.command == "AddObjectCommand") {
@@ -178,8 +99,20 @@ function Controller($scope) {
         $scope.$apply();
 
     });
+    
+    $scope.sendDemo = function(commandKey) {
+        console.log($scope.demoCommands[commandKey]);
+        var message = {
+            projectId: $scope.projectId,
+            command: $scope.demoCommands[commandKey]
+        };
+        
+        console.log(message);
 
-    $scope.send = function send(commandName) {
+        socket.emit('message', message);
+    };
+
+    $scope.send = function(commandName) {
         var message = {
             projectId: $scope.projectId,
             command: { name: commandName, value: {} }
@@ -197,6 +130,8 @@ function Controller($scope) {
                 }
             }
         });
+        
+        console.log( message );
 
         socket.emit('message', message);
     };

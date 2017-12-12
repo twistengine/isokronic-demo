@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" ng-app>
   <head>
-    <title>TEDi Request Demo</title>
+    <title>Isokronic Request Demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
@@ -68,8 +68,8 @@
         visibility: hidden;
         width:250px;
         position:absolute;
-        left:15px;
-        top:0px;
+        right:-90px;
+        top:25px;
         background-color:#666666;
         color:white;
         border-radius:5px;
@@ -82,6 +82,8 @@
       }
       
     </style>
+    <script src="/js/commands.js"></script>
+    <script src="/js/attributes.js"></script>
     <script src="/js/controller.js"></script>
   </head>
   <body>
@@ -117,7 +119,7 @@
                 <input type="text" ng-model="publicKey" class="form-control form-control-sm">
               </div>
               
-                <p>If you already have an account on isokronic.com you can set your own public key. <br>If not you can <a href="https://isokronic.com/signup">create your account</a>.</p>
+              <p>If you already have an account on isokronic.com you can set your own public key. <br>If not you can <a href="https://isokronic.com/signup">create your account</a>.</p>
             </div>
             <div class="tab-pane active" id="command"  role="tabpanel" aria-labelledby="command-tab">
               <div class="d-flex justify-content-start border border-info rounded align-middle" style="padding:5px">
@@ -127,7 +129,19 @@
                   <option ng-repeat="cmd in commands" data-toggle="tab" value="{{cmd.command}}">{{cmd.title}}</option>
                 </select>
               </div>
+              <div style="padding:5px">
+                <p style="width:100%">Demo commands:</p>
+              </div>
+              <button ng-repeat="cmd in demoCommands" data-toggle="tab" value="{{cmd.name}}" ng-click="sendDemo($index)" class="btn btn-small btn-default">{{cmd.title}}</button>
+              
               <div id="AddObjectCommand" ng-show="activeTab=='AddObjectCommand'">
+                 <div class="form-group" >
+                  <h3 ng-show="object.result">Result:</h3>
+                  <pre ng-show="object.result"><code>{{object.result}}</code></pre>
+                  <ul>
+                    <li ng-repeat="e in object.error" style="color:red">{{e}}</li>
+                  </ul>
+                </div>
                 <h3>Add Object</h3>
                 <form ng-submit="sendObject()" class="form">
                   
@@ -173,45 +187,48 @@
                   </div>
                   <input type="submit" class="btn btn-primary" value="Send">
                 </form>
-                <div class="form-group" >
-                  <h3 ng-show="object.result">Here is your data :</h3>
-                  <pre ng-show="object.result"><code>{{object.result}}</code></pre>
-                  <ul>
-                    <li ng-repeat="e in object.error" style="color:red">{{e}}</li>
-                  </ul>
-                </div>
+               
               </div>
               <!-- end object form -->
               <!--<button type="button" class="btn btn-sm btn-primary" data-toggle="tab" href="#AddObjectCommand" aria-expanded="true">Add Object</button>-->
               <!--<button type="button" ng-repeat="cmd in commands" class="btn btn-sm btn-primary" data-toggle="tab" href="#{{cmd.command}}" aria-expanded="true">{{cmd.title}}</button>-->
                 
               <div id="{{cmd.command}}" ng-repeat="cmd in commands" >
-                <div ng-show="activeTab==cmd.command">
-                  <h3>{{cmd.title}}</h3>
-                  <form ng-submit="send(cmd.command)">
-                    <div class="row" style="width:100%;margin:0">
-                      <div class="form-group " ng-repeat="v in cmd.values">
-                        <label ng-show="v.info">{{v.info}}</label>
-                        <input type="text" placeholder="{{v.name}}" ng-model="v.model" style="width:200px; float:left; margin: 0 15px 15px 0px" class="form-control form-control-sm" >
-                      </div>
-                      <i ng-show="cmd.infos" class="fa fa-question-circle" ng-click="info = !info" ng-init="info=false" style="position:relative">
-                        <span class="tooltip-info">
-                          <ul class="list-group">
-                            <li class="list-group-item" ng-repeat="i in cmd.infos">{{i}}</li>
-                          </ul>
-                        </span>
-                      </i>
-                      <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">?</button>
-                    </div>
-                    <input type="submit" class="btn btn-primary" value="Send">
-                  </form>
-                  <div class="form-group" >
-                    <h3 ng-show="cmd.result">Here is your data :</h3>
+                <div class="form-group" >
+                    <h3 ng-show="cmd.result">Result:</h3>
                     <pre ng-show="cmd.result"><code>{{cmd.result}}</code></pre>
                     <ul>
                       <li ng-repeat="e in cmd.error" style="color:red">{{e}}</li>
                     </ul>
                   </div>
+                <div ng-show="activeTab==cmd.command">
+                  <h3>{{cmd.title}}</h3>
+                  <form ng-submit="send(cmd.command)">
+                    <div class="row" style="width:100%;margin:0">
+                      <div class="form-group " ng-repeat="v in cmd.values">
+                        <!--<label ng-show="v.info">{{v.info}}</label>-->
+                        <input type="text" placeholder="{{v.name}}" ng-model="v.model" style="width:200px; float:left; margin: 0 15px 15px 0px" class="form-control form-control-sm" >
+                        <i ng-show="v.info" class="fa fa-question-circle" ng-click="info = !info" ng-init="info=false" style="position:relative">
+                          <span class="tooltip-info">
+                            {{v.info}}
+                          </span>
+                        </i>
+                      </div>
+                      <i ng-show="v.info" class="fa fa-question-circle" ng-click="info = !info" ng-init="info=false" style="position:relative">
+                        <!--<span class="tooltip-info">-->
+                        <!--  <ul class="list-group">-->
+                        <!--    <li class="list-group-item" ng-repeat="i in cmd.infos">{{i}}</li>-->
+                        <!--  </ul>-->
+                        <!--</span>-->
+                        <span class="tooltip-info">
+                          {{v.info}}
+                        </span>
+                      </i>
+                      <!--<button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">?</button>-->
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Send">
+                  </form>
+                  
                 </div>
               </div>
               <!-- end commands form-->
@@ -221,7 +238,7 @@
         <!-- end sidebar-->
         
         <div class="viewer">
-          <iframe width='100%' height='100%' src='https://tedi-twistengine.c9users.io/3d/embed/{{projectId}}?key={{publicKey}}' frameborder='0' allowfullscreen></iframe>
+          <iframe width='100%' height='100%' src='https://isokronic.com/3d/embed/{{projectId}}?key={{publicKey}}' frameborder='0' allowfullscreen></iframe>
         </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/jquery.min.js"></script>

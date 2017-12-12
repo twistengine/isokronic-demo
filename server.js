@@ -4,7 +4,8 @@ var path = require('path');
 var ik = require('isokronic');
 ik.setCredentials({
   email: "mathieu.cazelle@twistengine.com",
-  secretAccessKey: "4jATo1d244HuWB2_A-TnSbbO2jQa_9TvF3tmUuxcUAC"
+  secretAccessKey: "cs9BeFkuTV9ZOlctKE4MX_O5zP1Zkfh36xO8M_5HCT6",
+  // secretAccessKey: "srIj7Ud2CqCbYPj7904akG9Fq3jLwjzwjVotmJ-YLn-"
 });
 
 var async = require('async');
@@ -33,11 +34,10 @@ io.on('connection', function(socket) {
       else socket.emit('result', { command: msg.command.name, result: result });
 
     });
-
   });
 });
 
-server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {
+server.listen(3002, "127.0.0.1", function() {
   var addr = server.address();
   console.log("Chat server listening at", addr.address + ":" + addr.port);
 });
