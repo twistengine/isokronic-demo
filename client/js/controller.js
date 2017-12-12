@@ -47,15 +47,13 @@ function Controller($scope) {
             }
         }];
     
-    $scope.projectId = 'PnJGzTzmig2AHPMsh';//'kF964uptwQjNFC2H9';
-    $scope.publicKey = 'eq2BHFqMWvj8jt_jPvrCJ7stnj6q0RMyDPKnmPjKnbM';//'Qiyh5SnUQD_3VHP0WngCHHrN8kIxX4lhZLUNjee28wg';
+    $scope.projectId = 'YOUR_PROJECT_ID';
+    $scope.publicKey = 'YOUR_PUBLIC_KEY';
 
-    $scope.objectAttr = ikObjectAttr;
-
-    $scope.commands = ikCommands;
+    $scope.objectAttr = ikObjectAttr;// from js/attributes.js
+    $scope.commands = ikCommands;// from js/commands.js
 
     socket.on('error', function(msg) {
-        console.log("error");
         if (!msg) return;
         if (msg.command == "AddObjectCommand") {
 
@@ -77,7 +75,6 @@ function Controller($scope) {
     });
 
     socket.on('result', function(msg) {
-        console.log("result");
 
         if (!msg) return;
         if (msg.command == "AddObjectCommand") {
@@ -101,18 +98,17 @@ function Controller($scope) {
     });
     
     $scope.sendDemo = function(commandKey) {
-        console.log($scope.demoCommands[commandKey]);
+        
         var message = {
             projectId: $scope.projectId,
             command: $scope.demoCommands[commandKey]
         };
-        
-        console.log(message);
 
         socket.emit('message', message);
     };
 
     $scope.send = function(commandName) {
+        
         var message = {
             projectId: $scope.projectId,
             command: { name: commandName, value: {} }
@@ -130,8 +126,6 @@ function Controller($scope) {
                 }
             }
         });
-        
-        console.log( message );
 
         socket.emit('message', message);
     };
@@ -143,8 +137,6 @@ function Controller($scope) {
 
         var el = document.getElementById('icon-div');
         var regLength = reg.exec(value);
-
-        // console.log( regLength );
 
         if (regLength && regLength.length) {
 
@@ -168,6 +160,7 @@ function Controller($scope) {
 
     }
     $scope.sendObject = function send() {
+        
         var message = {
             projectId: $scope.projectId,
             command: { name: 'AddObjectCommand', value: {} }
@@ -199,7 +192,7 @@ function Controller($scope) {
                 }
             }
         });
-        //console.log(message);
+        
         socket.emit('message', message);
     };
 

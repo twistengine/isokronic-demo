@@ -3,9 +3,8 @@ var path = require('path');
 
 var ik = require('isokronic');
 ik.setCredentials({
-  email: "mathieu.cazelle@twistengine.com",
-  secretAccessKey: "cs9BeFkuTV9ZOlctKE4MX_O5zP1Zkfh36xO8M_5HCT6",
-  // secretAccessKey: "srIj7Ud2CqCbYPj7904akG9Fq3jLwjzwjVotmJ-YLn-"
+  email: "YOUR_MAIL",
+  secretAccessKey: "YOUR_SECRET_KEY"
 });
 
 var async = require('async');
